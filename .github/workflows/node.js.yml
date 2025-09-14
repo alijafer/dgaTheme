@@ -1,38 +1,19 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+name: Install Dependencies
 
-name: Node.js CI
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push]
 
 jobs:
-  build:
-
+  install-deps:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22.19.0]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-    - uses: actions/setup-node@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version: '20'
-        cache: 'npm'
-        cache-dependency-path: './dgaTheme/package-lock.json' # Adjust path if needed
-        path: node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+        node-version: '22' # Or your preferred Node.js version
 
-
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-    - run: npm install platformscode-new-react@latest
+    - name: Install platformscode-new-react
+      run: npm install platformscode-new-react@latest
