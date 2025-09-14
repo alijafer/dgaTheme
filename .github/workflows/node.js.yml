@@ -20,9 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-    - name: go to dir
-      run: cd ./my-homepage-app
-      
+
     - name: Install platformscode-new-react specifically (optional, if not in package.json)
       run: npm install platformscode-new-react@latest
 
