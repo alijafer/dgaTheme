@@ -1,9 +1,12 @@
-name: Install Dependencies
+name: Deploy React App to GitHub Pages
 
-on: [push]
+on:
+  push:
+    branches:
+      - main # Or 'master' depending on your default branch
 
 jobs:
-  install-deps:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,7 +16,23 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '22' # Or your preferred Node.js version
+        node-version: '22' # Use a stable LTS version
 
-    - name: Install platformscode-new-react
+    - name: Install dependencies
+      run: npm install
+    - name: go to dir
+      run: cd ./my-homepage-app
+      
+    - name: Install platformscode-new-react specifically (optional, if not in package.json)
       run: npm install platformscode-new-react@latest
+
+    - name: Build React App
+      run: npm run build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/main' # Only deploy from the main branch
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build # The directory where your build output is
+        # cname: example.com # Uncomment and set if you have a custom domain
